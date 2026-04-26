@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Snap AI - Dashboard</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #0f0f0f;
+      color: #ffffff;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      min-height: 100vh;
+    }
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 32px;
+      background: #1a1a1a;
+      border-bottom: 1px solid #2a2a2a;
+    }
+    .logo { font-size: 20px; font-weight: 700; color: #6366f1; }
+    .nav-right { display: flex; align-items: center; gap: 16px; }
+    .user-name { color: #999; font-size: 14px; }
+    .admin-link {
+      color: #6366f1;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .admin-link:hover { text-decoration: underline; }
+    .logout-btn {
+      background: none;
+      border: 1px solid #333;
+      color: #999;
+      padding: 6px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 13px;
+    }
+    .logout-btn:hover { border-color: #555; color: #fff; }
+    .container { max-width: 960px; margin: 40px auto; padding: 0 24px; }
+    h1 { font-size: 24px; margin-bottom: 24px; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+    }
+    .project-card {
+      background: #1a1a1a;
+      border-radius: 10px;
+      padding: 24px;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .project-card:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,0.3); }
+    .project-card h3 { margin-bottom: 8px; font-size: 18px; }
+    .project-card a {
+      color: #6366f1;
+      text-decoration: none;
+      font-size: 14px;
+    }
+    .project-card a:hover { text-decoration: underline; }
+    .empty {
+      text-align: center;
+      color: #666;
+      padding: 60px 0;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="logo">Snap AI</div>
+    <div class="nav-right">
+      <span class="admin-link" id="adminLink" style="display:none"><a href="/admin" class="admin-link">Admin</a></span>
+      <span class="user-name" id="userName"></span>
+      <button class="logout-btn" id="logoutBtn">Logout</button>
+    </div>
+  </nav>
+  <div class="container">
+    <h1>My Projects</h1>
+    <div id="content"></div>
+  </div>
+  <script>
+    async function load() {
+      try {
+        const [meRes, projRes] = await Promise.all([
+          fetch('/api/me'),
+          fetch('/api/my-projects')
+        ]);
+        if (meRes.status === 401) return window.location.href = '/login';
+        const me = await meRes.json();
+        const projects = await projRes.json();
+
+        document.getElementById('userName').textContent = me.name;
+        if (me.is_admin) document.getElementById('adminLink').style.display = 'inline';
+
+        const content = document.getElementById('content');
+        if (projects.length === 0) {
+          content.innerHTML = '<div class="empty">No projects assigned yet</div>';
+        } else {
+          content.innerHTML = '<div class="grid">' + projects.map(p =>
+            `<div class="project-card">
+              <h3>${esc(p.name)}</h3>
+              <a href="${esc(p.url)}" target="_blank">${esc(p.url)}</a>
+            </div>`
+          ).join('') + '</div>';
+        }
+      } catch {
+        window.location.href = '/login';
+      }
+    }
+
+    function esc(s) {
+      const d = document.createElement('div');
+      d.textContent = s;
+      return d.innerHTML;
+    }
+
+    document.getElementById('logoutBtn').addEventListener('click', async () => {
+      const res = await fetch('/logout', { method: 'POST' });
+      const data = await res.json();
+      window.location.href = data.redirect;
+    });
+
+    load();
+  </script>
+</body>
+</html>

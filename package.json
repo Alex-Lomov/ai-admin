@@ -1,0 +1,17 @@
+{
+  "name": "ai-admin",
+  "version": "1.0.0",
+  "description": "Central authentication and user management hub for Snap Supplements AI projects",
+  "main": "web/server.js",
+  "scripts": {
+    "start": "node web/server.js",
+    "setup-db": "node scripts/setup-db.js"
+  },
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "dotenv": "^17.4.2",
+    "express": "^4.21.0",
+    "express-session": "^1.18.0",
+    "pg": "^8.13.0"
+  }
+}
