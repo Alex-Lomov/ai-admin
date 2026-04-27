@@ -15,7 +15,10 @@ app.use(session({
   secret: process.env.SESSION_SECRET || 'snap-ai-admin-secret',
   resave: false,
   saveUninitialized: false,
-  cookie: { maxAge: 24 * 60 * 60 * 1000 }
+  cookie: {
+    maxAge: 24 * 60 * 60 * 1000,
+    domain: '.snapsupplements.org'
+  }
 }));
 
 // Middleware
