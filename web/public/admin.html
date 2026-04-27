@@ -318,15 +318,24 @@
       return d.innerHTML;
     }
 
-    // Tabs
+    // Tabs with URL hash
+    function switchTab(name) {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+      const tab = document.querySelector(`.tab[data-tab="${name}"]`);
+      if (tab) tab.classList.add('active');
+      const panel = document.getElementById(name + 'Panel');
+      if (panel) panel.classList.add('active');
+      history.replaceState(null, '', '#' + name);
+    }
+
     document.querySelectorAll('.tab').forEach(tab => {
-      tab.addEventListener('click', () => {
-        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-        document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-        tab.classList.add('active');
-        document.getElementById(tab.dataset.tab + 'Panel').classList.add('active');
-      });
+      tab.addEventListener('click', () => switchTab(tab.dataset.tab));
     });
+
+    // Load tab from URL hash on page load
+    const hashTab = location.hash.replace('#', '');
+    if (hashTab && document.getElementById(hashTab + 'Panel')) switchTab(hashTab);
 
     function openModal(id) { document.getElementById(id).classList.add('active'); }
     function closeModal(id) { document.getElementById(id).classList.remove('active'); }
