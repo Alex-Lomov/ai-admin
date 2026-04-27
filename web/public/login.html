@@ -117,6 +117,10 @@
         });
         const data = await res.json();
         if (data.success) {
+          if (window.PasswordCredential) {
+            const cred = new PasswordCredential({ id: document.getElementById('email').value, password: document.getElementById('password').value });
+            await navigator.credentials.store(cred);
+          }
           window.location.href = data.redirect;
         } else {
           errorEl.textContent = data.error;
