@@ -4,91 +4,125 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Snap AI - Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;450;500;600&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
-      background: #0f0f0f;
-      color: #ffffff;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f0ece5;
+      color: #1a1916;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
     }
     nav {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 16px 32px;
-      background: #1a1a1a;
-      border-bottom: 1px solid #2a2a2a;
+      padding: 14px 32px;
+      background: #e8e4dc;
+      border-bottom: 1px solid rgba(0,0,0,0.08);
     }
-    .nav-left { display: flex; align-items: center; gap: 12px; }
-    .logo { font-size: 20px; font-weight: 700; color: #6366f1; }
+    .nav-left { display: flex; align-items: center; gap: 10px; }
+    .logo { font-size: 16px; font-weight: 600; color: #1a1916; }
+    .logo span { color: #e07a55; }
     .badge {
-      background: #6366f1;
+      background: #e07a55;
       color: #fff;
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 700;
       padding: 3px 8px;
       border-radius: 4px;
       text-transform: uppercase;
+      letter-spacing: 0.05em;
     }
     .nav-right { display: flex; align-items: center; gap: 16px; }
-    .user-name { color: #999; font-size: 14px; }
-    .nav-link { color: #999; text-decoration: none; font-size: 14px; }
-    .nav-link:hover { color: #fff; }
+    .user-name { color: #6b6760; font-size: 13px; }
+    .nav-link { color: #6b6760; text-decoration: none; font-size: 13px; }
+    .nav-link:hover { color: #1a1916; }
     .logout-btn {
       background: none;
-      border: 1px solid #333;
-      color: #999;
+      border: 1px solid rgba(0,0,0,0.15);
+      color: #6b6760;
       padding: 6px 14px;
-      border-radius: 6px;
+      border-radius: 7px;
       cursor: pointer;
       font-size: 13px;
+      font-family: inherit;
     }
-    .logout-btn:hover { border-color: #555; color: #fff; }
+    .logout-btn:hover { border-color: rgba(0,0,0,0.3); color: #1a1916; }
     .container { max-width: 1100px; margin: 32px auto; padding: 0 24px; }
-    .tabs { display: flex; gap: 4px; margin-bottom: 24px; }
+    .tabs { display: flex; gap: 4px; margin-bottom: 20px; border-bottom: 1px solid rgba(0,0,0,0.08); padding-bottom: 0; }
     .tab {
-      padding: 10px 24px;
-      background: #1a1a1a;
+      padding: 9px 22px;
+      background: none;
       border: none;
-      color: #999;
+      color: #6b6760;
       font-size: 14px;
-      font-weight: 600;
+      font-weight: 500;
+      font-family: inherit;
       cursor: pointer;
-      border-radius: 8px 8px 0 0;
-      transition: color 0.2s, background 0.2s;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+      transition: color 0.15s;
     }
-    .tab.active { background: #252525; color: #fff; }
-    .tab:hover { color: #fff; }
+    .tab.active { color: #1a1916; border-bottom-color: #e07a55; }
+    .tab:hover { color: #1a1916; }
     .panel { display: none; }
     .panel.active { display: block; }
-    .toolbar { display: flex; justify-content: flex-end; margin-bottom: 16px; }
+    .toolbar { display: flex; justify-content: flex-end; margin-bottom: 14px; }
     .btn {
       padding: 8px 18px;
-      background: #6366f1;
+      background: #e07a55;
       color: #fff;
       border: none;
-      border-radius: 6px;
-      font-size: 14px;
+      border-radius: 7px;
+      font-size: 13px;
       font-weight: 600;
+      font-family: inherit;
       cursor: pointer;
+      transition: opacity 0.15s;
     }
-    .btn:hover { background: #5558e6; }
-    .btn-sm { padding: 5px 12px; font-size: 12px; }
+    .btn:hover { opacity: 0.88; }
+    .btn-sm { padding: 5px 11px; font-size: 12px; }
     .btn-outline {
       background: none;
-      border: 1px solid #333;
-      color: #ccc;
+      border: 1px solid rgba(0,0,0,0.15);
+      color: #6b6760;
     }
-    .btn-outline:hover { border-color: #6366f1; color: #6366f1; background: none; }
-    .btn-danger { background: #dc2626; }
-    .btn-danger:hover { background: #b91c1c; }
-    table { width: 100%; border-collapse: collapse; background: #1a1a1a; border-radius: 10px; overflow: hidden; }
-    th { text-align: left; padding: 12px 16px; color: #666; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid #2a2a2a; }
-    td { padding: 12px 16px; border-bottom: 1px solid #1f1f1f; font-size: 14px; }
+    .btn-outline:hover { border-color: #e07a55; color: #e07a55; background: none; opacity: 1; }
+    .btn-danger { background: #d04545; }
+    .btn-danger:hover { opacity: 0.88; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #ffffff;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      border: 1px solid rgba(0,0,0,0.06);
+    }
+    th {
+      text-align: left;
+      padding: 11px 16px;
+      color: #a09d98;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+      background: #f7f5f2;
+    }
+    td {
+      padding: 12px 16px;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+      font-size: 13px;
+      color: #1a1916;
+    }
     tr:last-child td { border-bottom: none; }
-    .status-active { color: #22c55e; }
-    .status-disabled { color: #ef4444; }
+    tr:hover td { background: #faf8f5; }
+    .status-active { color: #2a9d5c; font-weight: 500; }
+    .status-disabled { color: #d04545; font-weight: 500; }
     .actions { display: flex; gap: 6px; flex-wrap: wrap; }
 
     /* Modal */
@@ -96,66 +130,72 @@
       display: none;
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0,0,0,0.7);
+      background: rgba(0,0,0,0.35);
       z-index: 100;
       align-items: center;
       justify-content: center;
     }
     .modal-overlay.active { display: flex; }
     .modal {
-      background: #1a1a1a;
-      border-radius: 12px;
+      background: #ffffff;
+      border-radius: 14px;
       padding: 32px;
       width: 100%;
       max-width: 480px;
       max-height: 80vh;
       overflow-y: auto;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.12);
     }
-    .modal h2 { margin-bottom: 20px; font-size: 20px; }
-    .modal label { display: block; font-size: 13px; color: #999; margin-bottom: 4px; }
+    .modal h2 { margin-bottom: 22px; font-size: 18px; font-weight: 600; color: #1a1916; }
+    .modal label { display: block; font-size: 13px; font-weight: 500; color: #6b6760; margin-bottom: 5px; }
     .modal input[type="text"],
     .modal input[type="email"],
     .modal input[type="password"] {
       width: 100%;
-      padding: 10px;
-      background: #0f0f0f;
-      border: 1px solid #333;
-      border-radius: 6px;
-      color: #fff;
+      padding: 10px 13px;
+      background: #f7f5f2;
+      border: 1px solid rgba(0,0,0,0.1);
+      border-radius: 7px;
+      color: #1a1916;
       font-size: 14px;
+      font-family: inherit;
       margin-bottom: 14px;
       outline: none;
+      transition: border-color 0.15s;
     }
-    .modal input:focus { border-color: #6366f1; }
+    .modal input:focus { border-color: #e07a55; background: #fff; }
     .checkbox-row { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; }
-    .checkbox-row input { width: auto; margin: 0; }
-    .checkbox-row label { margin: 0; color: #ccc; }
+    .checkbox-row input { width: auto; margin: 0; accent-color: #e07a55; }
+    .checkbox-row label { margin: 0; color: #1a1916; font-size: 14px; }
     .modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 8px; }
-    .modal-actions .btn-cancel {
+    .btn-cancel {
       padding: 8px 18px;
-      background: #333;
-      color: #ccc;
+      background: #f0ece5;
+      color: #6b6760;
       border: none;
-      border-radius: 6px;
+      border-radius: 7px;
       cursor: pointer;
-      font-size: 14px;
+      font-size: 13px;
+      font-family: inherit;
     }
-
+    .btn-cancel:hover { background: #e8e4dc; }
     .access-list { margin-top: 12px; }
     .access-item {
       display: flex;
       align-items: center;
       gap: 8px;
       padding: 8px 0;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
     }
-    .access-item input { width: auto; }
-    .access-item label { color: #ccc; font-size: 14px; margin: 0; }
+    .access-item:last-child { border-bottom: none; }
+    .access-item input { width: auto; accent-color: #e07a55; }
+    .access-item label { color: #1a1916; font-size: 14px; margin: 0; }
   </style>
 </head>
 <body>
   <nav>
     <div class="nav-left">
-      <div class="logo">Snap AI</div>
+      <div class="logo">Snap <span>AI</span></div>
       <span class="badge">Admin</span>
     </div>
     <div class="nav-right">
@@ -290,12 +330,10 @@
     function openModal(id) { document.getElementById(id).classList.add('active'); }
     function closeModal(id) { document.getElementById(id).classList.remove('active'); }
 
-    // Close modals on overlay click
     document.querySelectorAll('.modal-overlay').forEach(el => {
       el.addEventListener('click', (e) => { if (e.target === el) el.classList.remove('active'); });
     });
 
-    // Load user info
     async function loadMe() {
       const res = await fetch('/api/me');
       if (res.status === 401) return window.location.href = '/login';
@@ -304,7 +342,6 @@
       document.getElementById('userName').textContent = me.name;
     }
 
-    // Load users
     async function loadUsers() {
       const res = await fetch('/api/admin/users');
       const users = await res.json();
@@ -326,7 +363,6 @@
       `).join('');
     }
 
-    // Load projects
     async function loadProjects() {
       const res = await fetch('/api/admin/projects');
       allProjects = await res.json();
@@ -334,18 +370,16 @@
         <tr>
           <td>${esc(p.name)}</td>
           <td>${esc(p.subdomain)}</td>
-          <td><a href="${esc(p.url)}" target="_blank" style="color:#6366f1">${esc(p.url)}</a></td>
+          <td><a href="${esc(p.url)}" target="_blank" style="color:#e07a55;text-decoration:none">${esc(p.url)}</a></td>
         </tr>
       `).join('');
     }
 
-    // Toggle user active
     async function toggleUser(id) {
       await fetch(`/api/admin/users/${id}/disable`, { method: 'POST' });
       loadUsers();
     }
 
-    // Reset password
     function openReset(id) {
       document.getElementById('resetUserId').value = id;
       document.getElementById('resetForm').querySelector('input[name="password"]').value = '';
@@ -363,20 +397,18 @@
       closeModal('resetModal');
     });
 
-    // Manage access
     async function openAccess(userId, name) {
       document.getElementById('accessUserName').textContent = name;
       const res = await fetch(`/api/admin/users/${userId}/projects`);
       const assigned = await res.json();
       const assignedIds = new Set(assigned.map(p => p.id));
-
       document.getElementById('accessList').innerHTML = allProjects.map(p => `
         <div class="access-item">
           <input type="checkbox" id="access_${p.id}" ${assignedIds.has(p.id) ? 'checked' : ''}
             onchange="toggleAccess(${userId}, ${p.id}, this.checked)">
           <label for="access_${p.id}">${esc(p.name)} (${esc(p.subdomain)})</label>
         </div>
-      `).join('') || '<div style="color:#666">No projects created yet</div>';
+      `).join('') || '<div style="color:#a09d98">No projects created yet</div>';
       openModal('accessModal');
     }
 
@@ -392,7 +424,6 @@
       }
     }
 
-    // Add user
     document.getElementById('addUserBtn').addEventListener('click', () => {
       document.getElementById('userForm').reset();
       openModal('userModal');
@@ -412,16 +443,10 @@
           is_admin: fd.get('is_admin') === 'on'
         })
       });
-      if (res.ok) {
-        closeModal('userModal');
-        loadUsers();
-      } else {
-        const data = await res.json();
-        alert(data.error);
-      }
+      if (res.ok) { closeModal('userModal'); loadUsers(); }
+      else { const data = await res.json(); alert(data.error); }
     });
 
-    // Add project
     document.getElementById('addProjectBtn').addEventListener('click', () => {
       document.getElementById('projectForm').reset();
       openModal('projectModal');
@@ -433,28 +458,18 @@
       const res = await fetch('/api/admin/projects', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: fd.get('name'),
-          subdomain: fd.get('subdomain')
-        })
+        body: JSON.stringify({ name: fd.get('name'), subdomain: fd.get('subdomain') })
       });
-      if (res.ok) {
-        closeModal('projectModal');
-        loadProjects();
-      } else {
-        const data = await res.json();
-        alert(data.error);
-      }
+      if (res.ok) { closeModal('projectModal'); loadProjects(); }
+      else { const data = await res.json(); alert(data.error); }
     });
 
-    // Logout
     document.getElementById('logoutBtn').addEventListener('click', async () => {
       const res = await fetch('/logout', { method: 'POST' });
       const data = await res.json();
       window.location.href = data.redirect;
     });
 
-    // Init
     loadMe();
     loadUsers();
     loadProjects();
